@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the repository containing the Python script
-                git url: 'https://github.com/your-repo/factorial.git', branch: 'main'
+                git url: 'https://github.com/mbairavi/devopstest.git', branch: 'master'
             }
         }
 
