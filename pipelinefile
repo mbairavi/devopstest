@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define environment variables if needed
+        PYTHON_SCRIPT = 'factorial.py'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the repository containing the Python script
+                git url: 'https://github.com/your-repo/factorial.git', branch: 'main'
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                script {
+                    // Ensure Python is installed
+                    sh 'python3 --version'
+                }
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                script {
+                    // Run the Python script and capture the output
+                    def output = sh(script: "python3 ${env.PYTHON_SCRIPT}", returnStdout: true).trim()
+                    echo "Python Script Output: ${output}"
+                }
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                // Archive the results if needed
+                archiveArtifacts artifacts: 'factorial_result.txt', allowEmptyArchive: true
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
